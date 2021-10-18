@@ -1,26 +1,69 @@
 export function generateBoard(values, main) {
-    main.appendChild(cluster(values[0]));
-    main.appendChild(cluster(values[1]));
-    main.appendChild(cluster(values[2]));
+    const clusters = values.map(cluster);
+
+    const blocks = [...clusters[0].cells, ...clusters[1].cells, ...clusters[2].cells];
+    const rows = [[], [], [], [], [], [], [], [], []];
+    const columns = [[], [], [], [], [], [], [], [], []];
+
+    for (let i = 0; i < 9; i++) {
+        const colOffset = (i % 3) * 3;
+        const rowOffset = Math.floor(i / 3) * 3;
+
+        for (let j = 0; j < 9; j++) {
+            const cell = blocks[i][j];
+            
+            const colIndex = colOffset +j - (Math.floor(j / 3) * 3);
+            const rowIndex = rowOffset + Math.floor(j / 3);
+
+            rows[rowIndex][colIndex] = cell;
+            columns[colIndex][rowIndex] = cell;
+        }
+    }
+
+    main.appendChild(clusters[0].element);
+    main.appendChild(clusters[1].element);
+    main.appendChild(clusters[2].element);
+
+    return {
+        blocks,
+        rows,
+        columns
+    };
 }
 
 
 function cluster(values) {
-    return e('div', { className: 'cluster' }, ...values.map(block));
+    const blocks = values.map(block);
+    return {
+        cells: blocks.map(b => b.cells),
+        element: e('div', { className: 'cluster' }, ...blocks.map(b => b.element))
+    }
 }
 
 function block(values) {
     const element = e('div', { className: 'block' });
 
-    element.appendChild(row(values.slice(0, 3)));
-    element.appendChild(row(values.slice(3, 6)));
-    element.appendChild(row(values.slice(6)));
+    const row1 = row(values.slice(0, 3));
+    const row2 = row(values.slice(3, 6));
+    const row3 = row(values.slice(6));
 
-    return element;
+    element.appendChild(row1.element);
+    element.appendChild(row2.element);
+    element.appendChild(row3.element);
+
+    return {
+        cells: [...row1.cells, ...row2.cells, ...row3.cells],
+        element
+    };
 }
 
 function row(values) {
-    return e('div', { className: 'row' }, ...values.map(cell));
+    const cells = values.map(cell);
+    const element = e('div', { className: 'row' }, ...cells);
+    return {
+        cells,
+        element
+    }
 }
 
 function cell(value) {
@@ -47,6 +90,13 @@ function e(type, attr, ...content) {
         }
         element.appendChild(item);
     }
+
+    return element;
+}
+
+export function button(label, callback) {
+    const element = e('button', {}, label);
+    element.addEventListener('click', callback);
 
     return element;
 }
