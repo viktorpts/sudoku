@@ -1,5 +1,7 @@
+import { p1 } from './puzzles.js';
 import { generateBoard, button } from './board.js';
 import { init } from './import.js';
+import { createTimer } from './timer.js';
 
 // Load puzzle
 // Generate DOM elements
@@ -10,18 +12,26 @@ import { init } from './import.js';
 window.addEventListener('DOMContentLoaded', start);
 
 function start() {
+    const panel = document.getElementById('panel');
     const main = document.querySelector('main');
+    const cells = generateBoard(p1, main);
+    /*
     let cells = {
         blocks: [[]],
         rows: [[]],
         columns: [[]],
     };
+    */
 
     const checkBtn = document.getElementById('checkBtn');
     checkBtn.addEventListener('click', () => {
-        cells.blocks.forEach(check);
-        cells.rows.forEach(check);
-        cells.columns.forEach(check);
+        const blocksReady = cells.blocks.every(check);
+        const rowsReady = cells.rows.every(check);
+        const colsReady = cells.columns.every(check);
+        if (blocksReady && rowsReady && colsReady) {
+            alert ('You win!');
+            timer.pause();
+        }
         checkBtn.replaceWith(uncheckBtn);
     });
     const uncheckBtn = button('Clear Check', () => {
@@ -29,7 +39,26 @@ function start() {
         uncheckBtn.replaceWith(checkBtn);
     });
 
-    init((puzzle) => cells = generateBoard(puzzle, main));
+    const timer = createTimer();
+
+    const pauseBtn = document.getElementById('pauseBtn');
+    pauseBtn.addEventListener('click', () => {
+        main.remove();
+        timer.pause();
+        pauseBtn.replaceWith(resumeBtn);
+    });
+    const resumeBtn = button('Resume', () => {
+        panel.before(main);
+        timer.resume();
+        resumeBtn.replaceWith(pauseBtn);
+    });
+
+    /*
+    init((puzzle) => {
+        cells = generateBoard(puzzle, main);
+        createTimer();
+    });
+    */
 }
 
 function check(cells) {
@@ -41,7 +70,10 @@ function check(cells) {
         }
     }
 
-    if (numbers.size != 9) {
+    if (numbers.size == 9) {
+        return true;
+    } else {
         cells.forEach(c => c.classList.add('error'));
+        return false;
     }
 }
