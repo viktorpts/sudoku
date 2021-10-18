@@ -1,4 +1,4 @@
-import { p1 } from './puzzles.js';
+// import { p1 } from './puzzles.js';
 import { generateBoard, button } from './board.js';
 import { init } from './import.js';
 import { createTimer } from './timer.js';
@@ -14,14 +14,12 @@ window.addEventListener('DOMContentLoaded', start);
 function start() {
     const panel = document.getElementById('panel');
     const main = document.querySelector('main');
-    const cells = generateBoard(p1, main);
-    /*
+    // const cells = generateBoard(p1, main);
     let cells = {
         blocks: [[]],
         rows: [[]],
         columns: [[]],
     };
-    */
 
     const checkBtn = document.getElementById('checkBtn');
     checkBtn.addEventListener('click', () => {
@@ -53,12 +51,10 @@ function start() {
         resumeBtn.replaceWith(pauseBtn);
     });
 
-    /*
     init((puzzle) => {
         cells = generateBoard(puzzle, main);
         createTimer();
     });
-    */
 }
 
 function check(cells) {
