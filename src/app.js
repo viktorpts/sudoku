@@ -1,5 +1,5 @@
-import { p1 } from './puzzles.js';
 import { generateBoard, button } from './board.js';
+import { init } from './import.js';
 
 // Load puzzle
 // Generate DOM elements
@@ -11,7 +11,11 @@ window.addEventListener('DOMContentLoaded', start);
 
 function start() {
     const main = document.querySelector('main');
-    const cells = generateBoard(p1, main);
+    let cells = {
+        blocks: [[]],
+        rows: [[]],
+        columns: [[]],
+    };
 
     const checkBtn = document.getElementById('checkBtn');
     checkBtn.addEventListener('click', () => {
@@ -25,7 +29,7 @@ function start() {
         uncheckBtn.replaceWith(checkBtn);
     });
 
-    window.cells = cells;
+    init((puzzle) => cells = generateBoard(puzzle, main));
 }
 
 function check(cells) {
