@@ -12,7 +12,6 @@ window.addEventListener('DOMContentLoaded', start);
 function start() {
     const main = document.querySelector('main');
     const cells = generateBoard(p1, main);
-    //const cells = generateBoard(new Array(3).fill(new Array(3).fill(new Array(9).fill(0))), main);
 
     const checkBtn = document.getElementById('checkBtn');
     checkBtn.addEventListener('click', () => {
@@ -28,7 +27,6 @@ function start() {
 
     window.cells = cells;
 }
-
 
 function check(cells) {
     const numbers = new Set();

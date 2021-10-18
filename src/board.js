@@ -73,6 +73,17 @@ function cell(value) {
         element.disabled = true;
         element.classList.add('fixed');
         element.value = value;
+    } else {
+        let currentValue = '';
+
+        element.addEventListener('input', () => {
+            const newValue = Number(element.value);
+            if (element.value == '' || (element.value.length == 1 && newValue >= 1 && newValue <= 9)) {
+                currentValue = element.value;
+            } else {
+                element.value = currentValue;
+            }
+        });
     }
 
     return element;
